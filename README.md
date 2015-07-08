@@ -23,7 +23,7 @@ along with NoiseGen.  If not, see <http://www.gnu.org/licenses/>.
 
 Requires CMake, FFTW, libpng, and Boost to build. Install these on Fedora/RPM systems with:
 
-    sudo yum install cmake libpng-devel fftw-devel
+    sudo yum install cmake libpng-devel fftw-devel boost-devel boost-random
 
 Then, clone this repository:
 

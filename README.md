@@ -50,6 +50,7 @@ Here are some sample command-lines:
     noisegen -d 2 -n 512 512 -pink -o out03.png
     noisegen -d 2 -n 512 512 -e -0.5 -o out04.png
     noisegen -d 2 -n 512 512 -e -1.5 -o out05.png
+    noisegen -d 2 -n 512 512 -e -1.5 -seed 134676 -o out06.png
     noisegen -d 2 -n 512 512 -e -0.5 -p 0.1 -1 0 0.05 10.0 -p 0.8 -0.2 0 0.05 10.0 -p 0.7 0.1 0 0.05 10.0 -o out15.png
     noisegen -d 2 -n 512 512 -e -0.5 -p 0.1 -1 0 0.05 3.0 -p 0.8 -0.2 0 0.05 3.0 -p 0.7 0.1 0 0.05 3.0 -o out16.png
     noisegen -d 2 -n 512 512 -e -1.2 -p 0.1 -1 0 0.05 3.0 -p 0.8 -0.2 0 0.05 3.0 -p 0.7 0.1 0 0.05 3.0 -o out17.png
@@ -61,7 +62,7 @@ Here are some sample command-lines:
     noisegen -d 2 -n 5000 3000 -white -p 0.7 0.7 0 0.05 10.0 -p 0.1 1.0 0 0.05 5.0 -g -o out25.png
 
 If you have any questions or encounter any problems, please contact
-the authors (we're really nice people) at mstock@umich.edu.
+the authors (we're really nice people) at markjstock@gmail.com
 
 
 ----------------------------------------------
@@ -76,6 +77,7 @@ Consider outputting CDF (n-dim), WAV (1-dim), APNG (3-d) files
 Normalize output somehow (make this a command-line option)
 Consider DICOM for 3D data, there are free viewers out there!
   (http://dicomlib.swri.ca/dicomlib.html for a C++ library)
+Use C++11, which has a native RNG with capabilities similar to boost
 
 #### Done
 

@@ -71,44 +71,28 @@ the authors (we're really nice people) at markjstock@gmail.com
 
 #### Still To Do
 
-Test code on non-cubic domains
-
-Consider outputting CDF (n-dim), WAV (1-dim), APNG (3-d) files
+* Test code on non-cubic domains
+* Consider outputting CDF (n-dim), WAV (1-dim), APNG (3-d) files
   (APNG is http://www.linuxfromscratch.org/blfs/view/svn/general/libpng.html)
-
-Normalize output somehow (make this a command-line option)
-
-Consider DICOM for 3D data, there are free viewers out there!
+* Normalize output somehow (make this a command-line option)
+* Consider DICOM for 3D data, there are free viewers out there!
   (http://dicomlib.swri.ca/dicomlib.html for a C++ library)
-
-Use C++11, which has a native RNG with capabilities similar to boost
+* Use C++11, which has a native RNG with capabilities similar to boost
 
 #### Done
 
-Add brick-of-shorts to supported output
-
-Incorporate Jim's changes to the CMakeLists.txt and reply to him
-
-Add CL options to paint a streak on the frequency plot (need direction, strength, width)
-
-Test code on non-square domains - was broken
-
-Try out the 3D BOBs on my hillslope evolver (needs vector data)
-
-Try out 2D streaks on the erosion solver - not great
-
-Try to add streaks on the frequency image before reconstruction
-
-Add switch in rng.cpp for boost version number (1.46 has different header file names)
-
-Is there a BOB library? what do I use for the landscape program?
-
-Finish 2d FFT work
-
-Link in PNG libs for 1d, 2d output
-
-Allow use of better RNGs (boost.random is awesome!)
-
-Put those into a random.c file? no, rng.cpp
+* Add brick-of-shorts to supported output
+* Incorporate Jim's changes to the CMakeLists.txt and reply to him
+* Add CL options to paint a streak on the frequency plot (need direction, strength, width)
+* Test code on non-square domains - was broken
+* Try out the 3D BOBs on my hillslope evolver (needs vector data)
+* Try out 2D streaks on the erosion solver - not great
+* Try to add streaks on the frequency image before reconstruction
+* Add switch in rng.cpp for boost version number (1.46 has different header file names)
+* Is there a BOB library? what do I use for the landscape program?
+* Finish 2d FFT work
+* Link in PNG libs for 1d, 2d output
+* Allow use of better RNGs (boost.random is awesome!)
+* Put those into a random.c file? no, rng.cpp
 
 

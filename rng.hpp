@@ -2,7 +2,7 @@
  * rng.h
  *
  *  This file is part of NoiseGen.
- *  Copyright 2012 Mark J. Stock and James Sussino
+ *  Copyright 2012,5 Mark J. Stock and James Sussino
  *
  *  NoiseGen is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -32,11 +32,11 @@ typedef enum randomNumberGeneratorType {library,mersenne} RNG;
 #ifdef __cplusplus
 extern "C"
 #endif
-int getRandomUniform (const RNG, float*, const size_t, const float, const float);
+int getRandomUniform (const RNG, const int, float*, const size_t, const float, const float);
 
 #ifdef __cplusplus
 extern "C"
 #endif
-int getRandomGaussian (const RNG, float*, const size_t, const float, const float);
+int getRandomGaussian (const RNG, const int, float*, const size_t, const float, const float);
 
 #endif // RNG_H

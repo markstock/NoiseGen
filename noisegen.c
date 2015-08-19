@@ -1,8 +1,8 @@
 /*
  * noisegen
  *
- * (c)2012 Mark J. Stock  mstock@umich.edu
- *     and James Susinno  james.susinno@gmail.com
+ * (c)2012,5 Mark J. Stock  mstock@umich.edu
+ *       and James Susinno  james.susinno@gmail.com
  *
  * Program to generate and write noise data
  *
@@ -17,13 +17,14 @@
  * 0.4  2012-08-20  MJS  3D generation, coloring, and BOB output
  * 0.5  2012-08-21  MJS  2D support for preference planes, non-square output
  * 0.6  2012-08-26  MJS  3D support for preference planes, brick-of-shorts
+ * 0.7  2015-08-19  MJS  Fixed Gaussian numbers, added seed
  *
  * Build with:
  * % cmake .
  * % make
  *
  *  This file is part of NoiseGen.
- *  Copyright 2012 Mark J. Stock and James Sussino
+ *  Copyright 2012,5 Mark J. Stock and James Sussino
  *
  *  NoiseGen is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -56,7 +57,7 @@
 #include "planes.h"
 
 void blur2D(float*, size_t, size_t);
-int Usage(char[255],int);
+int Usage(char[255], int);
 
 typedef enum noiseColorType {white,pink,red,brown,blue,violet} COLOR;
 typedef enum noisePdfType {uniform,Gaussian} PDF;
@@ -85,6 +86,8 @@ int main (int argc, char **argv) {
   PDF noisePdf = uniform;
   // random number generator
   RNG generator = mersenne;
+  // seed for rng
+  int randSeedVal = 23516;
   // preference planes/vectors
   uint32_t numPlanes = 0;
   PLANE planes[MAXPLANES];
@@ -120,6 +123,10 @@ int main (int argc, char **argv) {
     } else if (strncmp(argv[i], "-o", 2) == 0) {
       outfile = (char*) malloc(255*sizeof(char));
       strcpy(outfile,argv[++i]);
+    } else if (strncmp(argv[i], "-lib", 4) == 0) {
+      generator = library;
+    } else if (strncmp(argv[i], "-seed", 5) == 0) {
+      randSeedVal = (int)atoi(argv[++i]);
 
     } else if (strncmp(argv[i], "-red", 4) == 0) {
       noiseColor = red;
@@ -237,9 +244,9 @@ int main (int argc, char **argv) {
     // generate white (uncorrelated) noise
     // split on sample distribution
     if (noisePdf == uniform) {
-      getRandomUniform(generator,data,n[0],-1.0,1.0);
+      getRandomUniform(generator,randSeedVal,data,n[0],-1.0,1.0);
     } else if (noisePdf == Gaussian) {
-      getRandomGaussian(generator,data,n[0],0.0,1.0);
+      getRandomGaussian(generator,randSeedVal,data,n[0],0.0,1.0);
     }
 
     // shift power spectrum
@@ -259,9 +266,9 @@ int main (int argc, char **argv) {
     // generate white (uncorrelated) noise
     // split on sample distribution
     if (noisePdf == uniform) {
-      getRandomUniform(generator,data,n[0]*n[1],-1.0,1.0);
+      getRandomUniform(generator,randSeedVal,data,n[0]*n[1],-1.0,1.0);
     } else if (noisePdf == Gaussian) {
-      getRandomGaussian(generator,data,n[0]*n[1],0.0,1.0);
+      getRandomGaussian(generator,randSeedVal,data,n[0]*n[1],0.0,1.0);
     }
 
     // play around a little
@@ -300,9 +307,9 @@ int main (int argc, char **argv) {
     // generate white (uncorrelated) noise
     // split on sample distribution
     if (noisePdf == uniform) {
-      getRandomUniform(generator,data,n[0]*n[1]*n[2],-1.0,1.0);
+      getRandomUniform(generator,randSeedVal,data,n[0]*n[1]*n[2],-1.0,1.0);
     } else if (noisePdf == Gaussian) {
-      getRandomGaussian(generator,data,n[0]*n[1]*n[2],0.0,1.0);
+      getRandomGaussian(generator,randSeedVal,data,n[0]*n[1]*n[2],0.0,1.0);
     }
 
     // shift power spectrum
@@ -368,7 +375,7 @@ void blur2D(float *data, size_t nx, size_t ny) {
  * This function writes basic usage information to stderr,
  * and then quits. Too bad.
  */
-int Usage(char progname[255],int status) {
+int Usage(char progname[255], int status) {
 
   static char **cpp, *help_message[] = {
   "where [-options] are one or more of the following:                         ",
@@ -394,6 +401,11 @@ int Usage(char progname[255],int status) {
   "   -u          use uniform random numbers [default behavior]               ",
   "                                                                           ",
   "   -g          use Gaussian random numbers                                 ",
+  "                                                                           ",
+  "   -seed [int]  use the given random seed, otherwise seed is fixed         ",
+  "                                                                           ",
+  "   -lib        use C standard library random number generator instead      ",
+  "               of mt19937 from boost::random                               ",
   "                                                                           ",
   "   -p x y z width strength                                                 ",
   "               adds a preference plane to the output, x,y,z is the         ",

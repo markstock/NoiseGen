@@ -7,7 +7,7 @@
  * g++ -c rng.cpp -I/mnt/third_party/boost/boost_1_49_0/
  *
  *  This file is part of NoiseGen.
- *  Copyright 2012 Mark J. Stock and James Sussino
+ *  Copyright 2012,5 Mark J. Stock and James Sussino
  *
  *  NoiseGen is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -44,33 +44,29 @@ using namespace boost::random;
 mt19937 rng;
 
 
-float randFloat (void) {
-  UNIF_REAL<float> unit(0.0,1.0);
-  return (unit(rng));
-}
-
-float randGauss (void) {
-  normal_distribution<float> gaussian(0.0,1.0);
-  return (gaussian(rng));
-}
-
 //
 // Fill a block of floats with uniform random numbers
 //
-extern "C" int getRandomUniform (const RNG userng,
+extern "C" int getRandomUniform (
+    const RNG userng, const int randSeed,
     float* first, const size_t n,
     const float lower, const float upper) {
 
   const float scale = upper-lower;
 
   if (userng == library) {
+    srand(randSeed);
     for (size_t i=0; i<n; i++) {
       first[i] = lower + scale*rand()/(float)RAND_MAX;
     }
 
   } else if (userng == mersenne) {
+    UNIF_REAL<float> unit(0.0,1.0);
+    rng.seed(randSeed);
+    unit.reset();
+
     for (size_t i=0; i<n; i++) {
-      first[i] = lower + scale*randFloat();
+      first[i] = lower + scale*unit(rng);
     }
   }
 
@@ -80,19 +76,55 @@ extern "C" int getRandomUniform (const RNG userng,
 //
 // Fill a block of floats with gaussian random numbers
 //
-extern "C" int getRandomGaussian (const RNG userng,
+extern "C" int getRandomGaussian (
+    const RNG userng, const int randSeed,
     float* first, const size_t n,
     const float mean, const float stddev) {
 
   if (userng == library) {
-    // NOTE: does not use library rand() routine!
+    srand(randSeed);
+    for (size_t i=0; i<(n+1)/2; i++) {
+      float s = 2.0;
+      float u = 0.0;
+      float v = 0.0;
+      while (s == 0.0 || s >= 1.0) {
+        u = -1.0 + 2.0*rand()/(float)RAND_MAX;
+        v = -1.0 + 2.0*rand()/(float)RAND_MAX;
+        s = u*u + v*v;
+      }
+      const float rad = sqrt(-2.0 * logf(s) / s);
+      first[i*2] = mean + stddev * u * rad;
+      if (i*2+1 < n) first[i*2+1] = mean + stddev * v * rad;
+    }
+
+  } else if (0) {
+    // I thought this would work for userng == mersenne, but it doesn't
+    normal_distribution<float> gaussian(0.0,1.0);
+    rng.seed(randSeed);
+    gaussian.reset();
+
     for (size_t i=0; i<n; i++) {
-      first[i] = mean + stddev*randGauss();
+      first[i] = mean + stddev*gaussian(rng);
     }
 
   } else if (userng == mersenne) {
-    for (size_t i=0; i<n; i++) {
-      first[i] = mean + stddev*randGauss();
+    // so use Knop's form of the Box-Mueller transform, as above
+    UNIF_REAL<float> unit(-1.0,1.0);
+    rng.seed(randSeed);
+    unit.reset();
+
+    for (size_t i=0; i<(n+1)/2; i++) {
+      float s = 2.0;
+      float u = 0.0;
+      float v = 0.0;
+      while (s == 0.0 || s >= 1.0) {
+        u = unit(rng);
+        v = unit(rng);
+        s = u*u + v*v;
+      }
+      const float rad = sqrt(-2.0 * logf(s) / s);
+      first[i*2] = mean + stddev * u * rad;
+      if (i*2+1 < n) first[i*2+1] = mean + stddev * v * rad;
     }
   }
 

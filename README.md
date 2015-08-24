@@ -4,7 +4,7 @@ Command-line tool to generate 1D, 2D, or 3D noise textures
 ----------------------------------------------
 
 This file is part of NoiseGen.
-Copyright 2012 Mark J. Stock and James Sussino
+Copyright 2012,5 Mark J. Stock and James Sussino
 
 NoiseGen is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

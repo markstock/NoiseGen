@@ -6,7 +6,7 @@
  * link with -lfftw3f
  *
  *  This file is part of NoiseGen.
- *  Copyright 2012 Mark J. Stock and James Sussino
+ *  Copyright 2012,5 Mark J. Stock and James Sussino
  *
  *  NoiseGen is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -75,6 +75,7 @@ void* decompose3D (float* in,
  */
 int shiftPowerSpectrum3D (void *inout,
     const size_t nx, const size_t ny, const size_t nz,
+    const float longestWavelength, const float shortestWavelength,
     const float exponent) {
 
   fftwf_complex* data = (fftwf_complex*)inout;
@@ -99,6 +100,18 @@ int shiftPowerSpectrum3D (void *inout,
         data[ijk][0] *= factor;
         data[ijk][1] *= factor;
 
+        // band-pass filter by wavelength
+        if (ijk != 0) {
+          const float wavelength = 1.0 / sqrt(diag - 1.0);
+          if (wavelength > longestWavelength && longestWavelength > 0.0) {
+            data[ijk][0] = 0.0;
+            data[ijk][1] = 0.0;
+          }
+          if (wavelength < shortestWavelength && shortestWavelength > 0.0) {
+            data[ijk][0] = 0.0;
+            data[ijk][1] = 0.0;
+          }
+        }
       }
     }
   }

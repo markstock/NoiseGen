@@ -82,15 +82,18 @@ int main (int argc, char **argv) {
   // user-input exponent
   BOOL useInputExponent = FALSE;
   float inputExponent = 0.0;
+  // bandpass filter bounds
+  float longestWavelength = -1.0;
+  float shortestWavelength = -1.0;
+  // preference planes/vectors
+  uint32_t numPlanes = 0;
+  PLANE planes[MAXPLANES];
   // noise probabilty distribution function
   PDF noisePdf = uniform;
   // random number generator
   RNG generator = mersenne;
   // seed for rng
   int randSeedVal = 23516;
-  // preference planes/vectors
-  uint32_t numPlanes = 0;
-  PLANE planes[MAXPLANES];
   // output file types
   OUTFF outtype = text;
   char* outfile = NULL;
@@ -127,6 +130,12 @@ int main (int argc, char **argv) {
       generator = library;
     } else if (strncmp(argv[i], "-seed", 5) == 0) {
       randSeedVal = (int)atoi(argv[++i]);
+
+    } else if (strncmp(argv[i], "-short", 3) == 0) {
+      shortestWavelength = (float)atof(argv[++i]);
+    } else if (strncmp(argv[i], "-long", 3) == 0) {
+      longestWavelength = (float)atof(argv[++i]);
+
 
     } else if (strncmp(argv[i], "-red", 4) == 0) {
       noiseColor = red;
@@ -251,7 +260,7 @@ int main (int argc, char **argv) {
 
     // shift power spectrum
     if (noiseColor != white || useInputExponent)
-      shiftSpectrum1D(data,n[0],powerExp);
+      shiftSpectrum1D(data,n[0],longestWavelength,shortestWavelength,powerExp);
 
     // write resulting data
     (void) writeData1D (outtype, outfile, data, n[0]);
@@ -284,7 +293,7 @@ int main (int argc, char **argv) {
       void* interim = decompose2D(data,n[0],n[1]);
 
       // shift it to color the noise
-      shiftPowerSpectrum2D(interim,n[0],n[1],powerExp);
+      shiftPowerSpectrum2D(interim,n[0],n[1],longestWavelength,shortestWavelength,powerExp);
 
       // add spikes emanating from the origin in f space
       addPlanesToSpectrum2D(interim,n[0],n[1],numPlanes,planes);
@@ -319,7 +328,7 @@ int main (int argc, char **argv) {
       void* interim = decompose3D(data,n[0],n[1],n[2]);
 
       // shift it to color the noise
-      shiftPowerSpectrum3D(interim,n[0],n[1],n[2],powerExp);
+      shiftPowerSpectrum3D(interim,n[0],n[1],n[2],longestWavelength,shortestWavelength,powerExp);
 
       // add spikes emanating from the origin in f space
       // NOT DONE
@@ -397,6 +406,10 @@ int Usage(char progname[255], int status) {
   "   -violet     generate violet (f^2) noise                                 ",
   "                                                                           ",
   "   -e [real]   specify power law for noise                                 ",
+  "                                                                           ",
+  "   -long [real]  clip any wavelength longer than that given                ",
+  "                                                                           ",
+  "   -short [real]  clip any wavelength shorted than that given              ",
   "                                                                           ",
   "   -u          use uniform random numbers [default behavior]               ",
   "                                                                           ",

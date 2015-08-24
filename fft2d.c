@@ -6,7 +6,7 @@
  * link with -lfftw3f
  *
  *  This file is part of NoiseGen.
- *  Copyright 2012 Mark J. Stock and James Sussino
+ *  Copyright 2012,5 Mark J. Stock and James Sussino
  *
  *  NoiseGen is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -75,6 +75,7 @@ void* decompose2D (float* in,
  */
 int shiftPowerSpectrum2D (void *inout,
     const size_t nx, const size_t ny,
+    const float loFreqCutWavelen, const float hiFreqCutWavelen,
     const float exponent) {
 
   fftwf_complex* data = (fftwf_complex*)inout;
@@ -87,14 +88,27 @@ int shiftPowerSpectrum2D (void *inout,
   for (size_t i=0; i<nx; i++) {
     for (size_t j=0; j<ny/2+1; j++) {
 
-      float diag = 1 + j*j;
+      float diag = 1.0 + j*j;
       if (i < nx/2) diag += i*i;
       else diag += (nx-i)*(nx-i);
 
+      // adjust magnitude at this frequency to match noise "color"
       float factor = pow(diag, thisexp);
       data[i*(ny/2+1)+j][0] *= factor;
       data[i*(ny/2+1)+j][1] *= factor;
 
+      // adjust magnitude to crop out frequencies
+      if (!(i == 0 && j == 0)) {
+        const float wavelength = 1.0 / sqrt(diag - 1.0);
+        if (wavelength > loFreqCutWavelen && loFreqCutWavelen > 0.0) {
+          data[i*(ny/2+1)+j][0] = 0.0;
+          data[i*(ny/2+1)+j][1] = 0.0;
+        }
+        if (wavelength < hiFreqCutWavelen && hiFreqCutWavelen > 0.0) {
+          data[i*(ny/2+1)+j][0] = 0.0;
+          data[i*(ny/2+1)+j][1] = 0.0;
+        }
+      }
     }
   }
   float dcSignal = data[0][0] / ((float)ny*(float)nx);

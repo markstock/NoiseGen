@@ -6,7 +6,7 @@
  * link with -lfftw3f
  *
  *  This file is part of NoiseGen.
- *  Copyright 2012 Mark J. Stock and James Sussino
+ *  Copyright 2012,5 Mark J. Stock and James Sussino
  *
  *  NoiseGen is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -33,7 +33,9 @@
  * shift the spectrum, trying to maintain equivalent peak-peak,
  * then c2r inverse transform it back into a real signal
  */
-int shiftSpectrum1D (float *inout, const size_t n, const float exponent) {
+int shiftSpectrum1D (float *inout, const size_t n,
+    const float longestWavelength, const float shortestWavelength,
+    const float exponent) {
 
   fftwf_complex *data;
   fftwf_plan pforward, pinverse;
@@ -50,13 +52,33 @@ int shiftSpectrum1D (float *inout, const size_t n, const float exponent) {
 
   // scale the frequency components
   for (size_t i=1; i<n/2+1; i++) {
-    float factor = pow((float)(1+n/2-i), exponent);
+    const float factor = pow((float)(1+n/2-i), exponent);
     //printf("%d  %g %g   %g %g\n",i,data[i][0],data[i][1],(float)(1+n/2-i),factor);
     //printf("%d  %g\n",i,sqrt(pow(data[i][0],2)+pow(data[i][1],2)));
     data[i][0] *= factor;
     data[i][1] *= factor;
   }
-  //exit(0);
+
+  // band-pass filter the frequency components
+  if (longestWavelength > 0.0) {
+    for (size_t i=1; i<n/2+1; i++) {
+      const float wavelength = 1.0 / (float)(1+n/2-i);
+      if (wavelength > longestWavelength) {
+        data[i][0] = 0.0;
+        data[i][1] = 0.0;
+      }
+    }
+  }
+  if (shortestWavelength > 0.0) {
+    for (size_t i=1; i<n/2+1; i++) {
+      const float wavelength = 1.0 / (float)(1+n/2-i);
+      if (wavelength < shortestWavelength) {
+        data[i][0] = 0.0;
+        data[i][1] = 0.0;
+      }
+    }
+  }
+
   float dcSignal = data[0][0]/(float)n;
   fprintf(stderr,"dc signal is %g\n",dcSignal);
 

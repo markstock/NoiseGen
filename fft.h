@@ -2,7 +2,7 @@
  * fft.h
  *
  *  This file is part of NoiseGen.
- *  Copyright 2012 Mark J. Stock and James Sussino
+ *  Copyright 2012,5 Mark J. Stock and James Sussino
  *
  *  NoiseGen is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -33,15 +33,15 @@
 #define fmaxf(x, y) (((x) > (y)) ? (x) : (y))
 #endif
 
-int shiftSpectrum1D (float*, const size_t, const float);
+int shiftSpectrum1D (float*, const size_t, const float, const float, const float);
 
 void* decompose2D (float*, const size_t, const size_t);
-int shiftPowerSpectrum2D (void*, const size_t, const size_t, const float);
+int shiftPowerSpectrum2D (void*, const size_t, const size_t, const float, const float, const float);
 int addPlanesToSpectrum2D (void*, const size_t, const size_t, const uint32_t, const PLANE*);
 int reproject2D (void*, const size_t, const size_t, float*);
 
 void* decompose3D (float*, const size_t, const size_t, const size_t);
-int shiftPowerSpectrum3D (void*, const size_t, const size_t, const size_t, const float);
+int shiftPowerSpectrum3D (void*, const size_t, const size_t, const size_t, const float, const float, const float);
 int addPlanesToSpectrum3D (void*, const size_t, const size_t, const size_t, const uint32_t, const PLANE*);
 int reproject3D (void*, const size_t, const size_t, const size_t, float*);
 

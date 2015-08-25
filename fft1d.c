@@ -164,3 +164,35 @@ int inverse1Dfc (float *inout, const size_t n) {
 }
 
 
+//
+// Take any real signal, normalize to mean=0 and min=-max
+//
+void normalizeInPlace (float* inout, const size_t n) {
+
+  // find min, max, mean
+  float minVal = 9.9e+9;
+  float maxVal = -9.9e+9;
+  float meanVal = 0.0;
+  for (size_t i=0; i<n; i++) {
+    meanVal += inout[i];
+    if (inout[i] > maxVal) maxVal = inout[i];
+    if (inout[i] < minVal) minVal = inout[i];
+  }
+  meanVal /= (float)(n);
+
+  fprintf(stderr,"Original min/mean/max were %g / %g / %g\n",minVal, meanVal, maxVal);
+  fflush(stderr);
+
+  // find value farthest from mean
+  if (maxVal-meanVal > meanVal-minVal) {
+    minVal = 2.0*meanVal - maxVal;
+  } else {
+    maxVal = 2.0*meanVal - minVal;
+  }
+
+  // finally, rescale
+  float range = maxVal - minVal;
+  for (size_t i=0; i<n; i++) {
+    inout[i] = -1.0 + 2.0 * (inout[i] - minVal) / range;
+  }
+}

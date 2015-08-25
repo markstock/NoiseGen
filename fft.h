@@ -34,6 +34,7 @@
 #endif
 
 int shiftSpectrum1D (float*, const size_t, const float, const float, const float);
+void normalizeInPlace (float*, const size_t);
 
 void* decompose2D (float*, const size_t, const size_t);
 int shiftPowerSpectrum2D (void*, const size_t, const size_t, const float, const float, const float);

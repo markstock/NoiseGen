@@ -88,6 +88,8 @@ int main (int argc, char **argv) {
   // preference planes/vectors
   uint32_t numPlanes = 0;
   PLANE planes[MAXPLANES];
+  // zero mean?
+  BOOL zeroMean = FALSE;
   // noise probabilty distribution function
   PDF noisePdf = uniform;
   // random number generator
@@ -128,6 +130,8 @@ int main (int argc, char **argv) {
       strcpy(outfile,argv[++i]);
     } else if (strncmp(argv[i], "-lib", 4) == 0) {
       generator = library;
+    } else if (strncmp(argv[i], "-zero", 2) == 0) {
+      zeroMean = TRUE;
     } else if (strncmp(argv[i], "-seed", 5) == 0) {
       randSeedVal = (int)atoi(argv[++i]);
 
@@ -303,6 +307,8 @@ int main (int argc, char **argv) {
     }
 
     // renormalize
+    if (zeroMean)
+      normalizeInPlace(data,n[0]*n[1]);
 
     // write resulting data
     writeData2D (outtype, outfile, data, n[0], n[1]);

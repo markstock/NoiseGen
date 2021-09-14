@@ -18,8 +18,7 @@
  *  along with NoiseGen.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef NOISEGEN_H
-#define NOISEGEN_H
+#pragma once
 
 #define BOOL int8_t
 #define TRUE 1
@@ -28,4 +27,3 @@
 #define MAXDIMS 3
 #define SUPPORTEDDIMS 3
 
-#endif // NOISEGEN_H

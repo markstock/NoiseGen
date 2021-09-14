@@ -18,8 +18,7 @@
  *  along with NoiseGen.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FFT_H
-#define FFT_H
+#pragma once
 
 #include <stdint.h>
 #include "planes.h"
@@ -49,4 +48,3 @@ int reproject3D (void*, const size_t, const size_t, const size_t, float*);
 int forward1Dfc (float*, const size_t);
 int inverse1Dfc (float*, const size_t);
 
-#endif // FFT_H

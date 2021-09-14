@@ -20,8 +20,7 @@
  *  along with NoiseGen.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef PLANES_H
-#define PLANES_H
+#pragma once
 
 #include "noisegen.h"
 
@@ -40,4 +39,3 @@ typedef struct planeDefinitionType {
   float strength;
 } PLANE;
 
-#endif // PLANES_H

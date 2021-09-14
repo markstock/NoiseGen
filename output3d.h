@@ -20,8 +20,7 @@
  *  along with NoiseGen.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef OUTPUT3D_H
-#define OUTPUT3D_H
+#pragma once
 
 #include <stdio.h>
 #include <stdint.h>
@@ -29,4 +28,3 @@
 
 void writeData3D (OUTFF, char*, float*, size_t, size_t, size_t);
 
-#endif // OUTPUT3D_H

@@ -20,8 +20,7 @@
  *  along with NoiseGen.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef OUTPUT1D_H
-#define OUTPUT1D_H
+#pragma once
 
 #include <stdio.h>
 #include <stdint.h>
@@ -30,4 +29,3 @@
 void writeData1D (OUTFF, char*, float*, size_t);
 void writeSpectrum1D (OUTFF, char*, float*, size_t);
 
-#endif // OUTPUT1D_H

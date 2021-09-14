@@ -18,8 +18,7 @@
  *  along with NoiseGen.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef RNG_H
-#define RNG_H
+#pragma once
 
 #ifdef __cplusplus
 #include <cstddef>
@@ -39,4 +38,3 @@ extern "C"
 #endif
 int getRandomGaussian (const RNG, const int, float*, const size_t, const float, const float);
 
-#endif // RNG_H

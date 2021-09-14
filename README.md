@@ -4,7 +4,7 @@ Command-line tool to generate 1D, 2D, or 3D noise textures
 ----------------------------------------------
 
 This file is part of NoiseGen.
-Copyright 2012,5 Mark J. Stock and James Sussino
+Copyright 2012,15,21 Mark J. Stock and James Sussino
 
 NoiseGen is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -61,38 +61,19 @@ Here are some sample command-lines:
     noisegen -d 2 -n 5000 3000 -red -p 0.7 0.7 0 0.05 10.0 -p 0.1 1.0 0 0.05 5.0 -g -o out24.png
     noisegen -d 2 -n 5000 3000 -white -p 0.7 0.7 0 0.05 10.0 -p 0.1 1.0 0 0.05 5.0 -g -o out25.png
 
-If you have any questions or encounter any problems, please contact
-the authors (we're really nice people) at markjstock@gmail.com
+If you have any questions or encounter any problems, please create an issue.
 
 
 ----------------------------------------------
 
 ## Developer information
 
-#### Still To Do
+#### ToDo List
 
-* Test code on non-cubic domains
+* Debug non-cubic domains
 * Consider outputting CDF (n-dim), WAV (1-dim), APNG (3-d) files
   (APNG is http://www.linuxfromscratch.org/blfs/view/svn/general/libpng.html)
 * Normalize output somehow (make this a command-line option)
 * Consider DICOM for 3D data, there are free viewers out there!
   (http://dicomlib.swri.ca/dicomlib.html for a C++ library)
-
-#### Done
-
-* Use C++11, which has a native RNG with capabilities similar to boost
-* Add brick-of-shorts to supported output
-* Incorporate Jim's changes to the CMakeLists.txt and reply to him
-* Add CL options to paint a streak on the frequency plot (need direction, strength, width)
-* Test code on non-square domains - was broken
-* Try out the 3D BOBs on my hillslope evolver (needs vector data)
-* Try out 2D streaks on the erosion solver - not great
-* Try to add streaks on the frequency image before reconstruction
-* Add switch in rng.cpp for boost version number (1.46 has different header file names)
-* Is there a BOB library? what do I use for the landscape program?
-* Finish 2d FFT work
-* Link in PNG libs for 1d, 2d output
-* Allow use of better RNGs (boost.random is awesome!)
-* Put those into a random.c file? no, rng.cpp
-
 

@@ -1,13 +1,11 @@
 /*
  * rng.cpp - part of noisegen
  *
- * Use the Boost:Random library to generate better and more varied
+ * Use the new std::random library to generate better and more varied
  * pseudo-random numbers.
  *
- * g++ -c rng.cpp -I/mnt/third_party/boost/boost_1_49_0/
- *
  *  This file is part of NoiseGen.
- *  Copyright 2012,5 Mark J. Stock and James Sussino
+ *  Copyright 2012,15,21 Mark J. Stock and James Sussino
  *
  *  NoiseGen is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -25,23 +23,12 @@
 
 #include "rng.hpp"
 
-#include <boost/random/mersenne_twister.hpp>
-#include <boost/random/uniform_real.hpp>
-#include <boost/random/normal_distribution.hpp>
+#include <random>
 #include <limits>
 
-#include <boost/version.hpp>
-#if BOOST_VERSION >= 104700
-#define UNIF_REAL uniform_real_distribution
-#else
-#define UNIF_REAL uniform_real
-#endif
 
-using namespace boost;
-using namespace boost::random;
-
-// this is the high-quality, good-performance RNG that I like
-mt19937 rng;
+std::random_device rd;  // Will be used to obtain a seed for the random number engine
+std::mt19937 rng(rd()); // Standard mersenne_twister_engine seeded with rd()
 
 
 //
@@ -61,7 +48,7 @@ extern "C" int getRandomUniform (
     }
 
   } else if (userng == mersenne) {
-    UNIF_REAL<float> unit(0.0,1.0);
+    std::uniform_real_distribution<float> unit(0.0,1.0);
     rng.seed(randSeed);
     unit.reset();
 
@@ -97,34 +84,13 @@ extern "C" int getRandomGaussian (
       if (i*2+1 < n) first[i*2+1] = mean + stddev * v * rad;
     }
 
-  } else if (0) {
-    // I thought this would work for userng == mersenne, but it doesn't
-    normal_distribution<float> gaussian(0.0,1.0);
+  } else if (userng == mersenne) {
+    std::normal_distribution<float> gaussian{0.0,1.0};
     rng.seed(randSeed);
     gaussian.reset();
 
     for (size_t i=0; i<n; i++) {
       first[i] = mean + stddev*gaussian(rng);
-    }
-
-  } else if (userng == mersenne) {
-    // so use Knop's form of the Box-Mueller transform, as above
-    UNIF_REAL<float> unit(-1.0,1.0);
-    rng.seed(randSeed);
-    unit.reset();
-
-    for (size_t i=0; i<(n+1)/2; i++) {
-      float s = 2.0;
-      float u = 0.0;
-      float v = 0.0;
-      while (s == 0.0 || s >= 1.0) {
-        u = unit(rng);
-        v = unit(rng);
-        s = u*u + v*v;
-      }
-      const float rad = sqrt(-2.0 * logf(s) / s);
-      first[i*2] = mean + stddev * u * rad;
-      if (i*2+1 < n) first[i*2+1] = mean + stddev * v * rad;
     }
   }
 

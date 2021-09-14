@@ -27,6 +27,7 @@ IF(UNIX)
 
 	#set (CMAKE_C_FLAGS "-std=c99 -O0 -g -ggdb")
 	set (CMAKE_C_FLAGS "-std=c99 -O2")
+	set (CMAKE_CXX_FLAGS "-std=c++11 -O2")
 	INCLUDE(FindPNG)
 	#INCLUDE(FindFFTW)
 	#link_directories (/usr/lib64/libfftw3f.so)
@@ -37,11 +38,6 @@ ELSEIF(WIN32)
 	# Some of the content in this section is cross-platform(such as the glob and the Find scripts)
 	# and can be pushed incrementally out of the WIN32 section.
 	#
-
-	FIND_PACKAGE(Boost)
-	IF (Boost_FOUND)
-		INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIR})
-	ENDIF()
 
 	INCLUDE_DIRECTORIES("./")
 

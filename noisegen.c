@@ -1,7 +1,7 @@
 /*
  * noisegen
  *
- * (c)2012,5 Mark J. Stock  mstock@umich.edu
+ * (c)2012,15,21 Mark J. Stock  mstock@umich.edu
  *       and James Susinno  james.susinno@gmail.com
  *
  * Program to generate and write noise data
@@ -18,13 +18,14 @@
  * 0.5  2012-08-21  MJS  2D support for preference planes, non-square output
  * 0.6  2012-08-26  MJS  3D support for preference planes, brick-of-shorts
  * 0.7  2015-08-19  MJS  Fixed Gaussian numbers, added seed
+ * 0.8  2021-09-14  MJS  Removing Boost dependency
  *
  * Build with:
  * % cmake .
  * % make
  *
  *  This file is part of NoiseGen.
- *  Copyright 2012,5 Mark J. Stock and James Sussino
+ *  Copyright 2012,15,21 Mark J. Stock and James Sussino
  *
  *  NoiseGen is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -424,7 +425,7 @@ int Usage(char progname[255], int status) {
   "   -seed [int]  use the given random seed, otherwise seed is fixed         ",
   "                                                                           ",
   "   -lib        use C standard library random number generator instead      ",
-  "               of mt19937 from boost::random                               ",
+  "               of mt19937 from std::random                                 ",
   "                                                                           ",
   "   -p x y z width strength                                                 ",
   "               adds a preference plane to the output, x,y,z is the         ",

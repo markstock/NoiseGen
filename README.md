@@ -23,9 +23,9 @@ along with NoiseGen.  If not, see <http://www.gnu.org/licenses/>.
 
 ## Installation and usage
 
-Requires CMake, FFTW, libpng, and Boost to build. Install these on Fedora/RPM systems with:
+Requires CMake, FFTW, and libpng to build. Install these on Fedora/RPM systems with:
 
-    sudo yum install cmake libpng-devel fftw-devel boost-devel boost-random
+    sudo yum install cmake libpng-devel fftw-devel
 
 Then, clone this repository:
 
@@ -77,10 +77,10 @@ the authors (we're really nice people) at markjstock@gmail.com
 * Normalize output somehow (make this a command-line option)
 * Consider DICOM for 3D data, there are free viewers out there!
   (http://dicomlib.swri.ca/dicomlib.html for a C++ library)
-* Use C++11, which has a native RNG with capabilities similar to boost
 
 #### Done
 
+* Use C++11, which has a native RNG with capabilities similar to boost
 * Add brick-of-shorts to supported output
 * Incorporate Jim's changes to the CMakeLists.txt and reply to him
 * Add CL options to paint a streak on the frequency plot (need direction, strength, width)
